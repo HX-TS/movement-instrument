@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Lalamove Tracking Dashboard</title>
 
@@ -23,9 +23,9 @@
       color: white;
     }
 
-    /* ==============================
-       HEADER
-    ============================== */
+    /* =====================================================
+       TOP HEADER
+    ===================================================== */
 
     .header {
       height: 58px;
@@ -64,15 +64,17 @@
       background: #333;
     }
 
-    /* ==============================
-       MAIN 3-WINDOW GRID
-    ============================== */
+
+    /* =====================================================
+       MAIN DASHBOARD
+    ===================================================== */
 
     .dashboard {
       height: calc(100vh - 58px);
+
       display: grid;
 
-      /* 3 equal windows */
+      /* 3 WINDOWS SIDE BY SIDE */
       grid-template-columns: repeat(3, 1fr);
 
       gap: 5px;
@@ -80,25 +82,35 @@
       background: #080808;
     }
 
+
+    /* =====================================================
+       WINDOW
+    ===================================================== */
+
     .window {
       min-width: 0;
       height: 100%;
+
       background: #181818;
+
       border: 1px solid #333;
       border-radius: 7px;
+
       overflow: hidden;
 
       display: flex;
       flex-direction: column;
     }
 
-    /* ==============================
+
+    /* =====================================================
        WINDOW HEADER
-    ============================== */
+    ===================================================== */
 
     .window-header {
       height: 55px;
       min-height: 55px;
+
       background: #202020;
       border-bottom: 1px solid #333;
 
@@ -120,19 +132,18 @@
       width: 10px;
       height: 10px;
       min-width: 10px;
-      border-radius: 50%;
-      background: #39d353;
-      box-shadow: 0 0 7px #39d353;
-    }
 
-    .status-dot.waiting {
-      background: #ffb020;
-      box-shadow: 0 0 7px #ffb020;
+      border-radius: 50%;
+
+      background: #39d353;
+
+      box-shadow: 0 0 7px #39d353;
     }
 
     .window-title {
       font-size: 14px;
       font-weight: bold;
+
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -140,7 +151,9 @@
 
     .window-subtitle {
       margin-top: 3px;
+
       color: #888;
+
       font-size: 10px;
     }
 
@@ -151,11 +164,17 @@
 
     .window-button {
       padding: 6px 8px;
+
       border: 1px solid #444;
+
       background: #292929;
+
       color: white;
+
       border-radius: 4px;
+
       cursor: pointer;
+
       font-size: 11px;
     }
 
@@ -163,82 +182,49 @@
       background: #3b3b3b;
     }
 
-    /* ==============================
+
+    /* =====================================================
        IFRAME
-    ============================== */
+    ===================================================== */
 
     .frame-container {
       position: relative;
+
       flex: 1;
+
       background: white;
     }
 
     iframe {
       width: 100%;
       height: 100%;
+
       border: none;
+
       background: white;
     }
 
-    /* ==============================
-       ONGOING WINDOW
-    ============================== */
 
-    .ongoing-panel {
-      width: 100%;
-      height: 100%;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      background:
-        radial-gradient(circle at center, #242424 0%, #151515 60%, #101010 100%);
-
-      color: white;
-      text-align: center;
-    }
-
-    .ongoing-icon {
-      font-size: 55px;
-      margin-bottom: 15px;
-    }
-
-    .ongoing-title {
-      font-size: 25px;
-      font-weight: 700;
-    }
-
-    .ongoing-text {
-      margin-top: 8px;
-      font-size: 13px;
-      color: #999;
-    }
-
-    .ongoing-badge {
-      margin-top: 18px;
-      padding: 8px 18px;
-      border-radius: 20px;
-      background: #372b10;
-      border: 1px solid #795b15;
-      color: #ffbf35;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    /* ==============================
-       RESPONSIVE
-    ============================== */
+    /* =====================================================
+       MOBILE / SMALL SCREEN
+    ===================================================== */
 
     @media (max-width: 1000px) {
+
       body {
         overflow: auto;
+      }
+
+      .header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
       }
 
       .dashboard {
         height: auto;
         min-height: calc(100vh - 58px);
+
         grid-template-columns: 1fr;
       }
 
@@ -246,14 +232,41 @@
         height: 650px;
       }
     }
+
+
+    @media (max-width: 600px) {
+
+      .header {
+        padding: 0 10px;
+      }
+
+      .header-title {
+        font-size: 14px;
+      }
+
+      .header-right span {
+        display: none;
+      }
+
+      .refresh-all {
+        padding: 6px 10px;
+      }
+
+      .window {
+        height: 600px;
+      }
+    }
+
   </style>
 </head>
 
+
 <body>
 
-  <!-- ==============================
-       TOP HEADER
-  =============================== -->
+
+  <!-- =====================================================
+       MAIN HEADER
+  ====================================================== -->
 
   <div class="header">
 
@@ -271,7 +284,9 @@
       <button
         class="refresh-all"
         onclick="refreshAll()">
+
         ↻ Refresh All
+
       </button>
 
     </div>
@@ -279,16 +294,18 @@
   </div>
 
 
-  <!-- ==============================
+
+  <!-- =====================================================
        DASHBOARD
-  =============================== -->
+  ====================================================== -->
 
   <div class="dashboard">
 
 
-    <!-- ===================================
-         WINDOW 1 - CRYOFLEET
-    ==================================== -->
+    <!-- =================================================
+         WINDOW 1
+         CRYOFLEET
+    ================================================== -->
 
     <div class="window">
 
@@ -299,6 +316,7 @@
           <div class="status-dot"></div>
 
           <div>
+
             <div class="window-title">
               CRYOFLEET
             </div>
@@ -306,34 +324,48 @@
             <div class="window-subtitle">
               Lalamove Live Tracking
             </div>
+
           </div>
 
         </div>
+
 
         <div class="window-buttons">
 
           <button
             class="window-button"
+            title="Refresh"
             onclick="refreshFrame('cryofleet')">
+
             ↻
+
           </button>
+
 
           <button
             class="window-button"
+            title="Open in new tab"
             onclick="openCryofleet()">
+
             ↗
+
           </button>
 
         </div>
 
       </div>
 
+
+
       <div class="frame-container">
 
         <iframe
           id="cryofleet"
+
           src="https://share.lalamove.com/?MY100260819112756959410010096388787&lang=en_MY&sign=fa4cff030cd65decc4e2f08cb92e010e&source=android"
+
           allow="geolocation">
+
         </iframe>
 
       </div>
@@ -342,9 +374,10 @@
 
 
 
-    <!-- ===================================
-         WINDOW 2 - PETROCAL
-    ==================================== -->
+    <!-- =================================================
+         WINDOW 2
+         PETROCAL
+    ================================================== -->
 
     <div class="window">
 
@@ -368,18 +401,26 @@
 
         </div>
 
+
         <div class="window-buttons">
 
           <button
             class="window-button"
-            onclick="refreshFrame('petrocal')">
+            title="Refresh"
+            onclick="refreshFrame('petrocal1')">
+
             ↻
+
           </button>
+
 
           <button
             class="window-button"
-            onclick="openPetrocal()">
+            title="Open in new tab"
+            onclick="openPetrocal1()">
+
             ↗
+
           </button>
 
         </div>
@@ -387,12 +428,16 @@
       </div>
 
 
+
       <div class="frame-container">
 
         <iframe
-          id="petrocal"
+          id="petrocal1"
+
           src="https://share.lalamove.com/?MY100260819115508237410010096251754&lang=en_MY&sign=26d4c8b15f6cc788f148a4c31b55111d&source=android"
+
           allow="geolocation">
+
         </iframe>
 
       </div>
@@ -401,9 +446,10 @@
 
 
 
-    <!-- ===================================
-         WINDOW 3 - PETROCAL ONGOING
-    ==================================== -->
+    <!-- =================================================
+         WINDOW 3
+         PETROCAL
+    ================================================== -->
 
     <div class="window">
 
@@ -411,7 +457,7 @@
 
         <div class="window-info">
 
-          <div class="status-dot waiting"></div>
+          <div class="status-dot"></div>
 
           <div>
 
@@ -420,37 +466,51 @@
             </div>
 
             <div class="window-subtitle">
-              Next Delivery
+              Lalamove Live Tracking
             </div>
 
           </div>
 
         </div>
 
+
+        <div class="window-buttons">
+
+          <button
+            class="window-button"
+            title="Refresh"
+            onclick="refreshFrame('petrocal2')">
+
+            ↻
+
+          </button>
+
+
+          <button
+            class="window-button"
+            title="Open in new tab"
+            onclick="openPetrocal2()">
+
+            ↗
+
+          </button>
+
+        </div>
+
       </div>
+
 
 
       <div class="frame-container">
 
-        <div class="ongoing-panel">
+        <iframe
+          id="petrocal2"
 
-          <div class="ongoing-icon">
-            🚚
-          </div>
+          src="https://share.lalamove.com/?MY100260819155759517410010063537331&lang=en_MY&sign=5f1683fdf5c077212724ebbe967f1e3f&source=android"
 
-          <div class="ongoing-title">
-            PETROCAL
-          </div>
+          allow="geolocation">
 
-          <div class="ongoing-text">
-            Delivery tracking link pending
-          </div>
-
-          <div class="ongoing-badge">
-            ONGOING
-          </div>
-
-        </div>
+        </iframe>
 
       </div>
 
@@ -460,48 +520,80 @@
   </div>
 
 
-  <!-- ==============================
-       SCRIPT
-  =============================== -->
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
 
   <script>
+
+    /* =====================================================
+       TRACKING LINKS
+    ===================================================== */
 
     const cryofleetURL =
       "https://share.lalamove.com/?MY100260819112756959410010096388787&lang=en_MY&sign=fa4cff030cd65decc4e2f08cb92e010e&source=android";
 
-    const petrocalURL =
+
+    const petrocal1URL =
       "https://share.lalamove.com/?MY100260819115508237410010096251754&lang=en_MY&sign=26d4c8b15f6cc788f148a4c31b55111d&source=android";
 
 
-    /* ==============================
-       REFRESH ONE WINDOW
-    ============================== */
+    const petrocal2URL =
+      "https://share.lalamove.com/?MY100260819155759517410010063537331&lang=en_MY&sign=5f1683fdf5c077212724ebbe967f1e3f&source=android";
+
+
+
+    /* =====================================================
+       REFRESH INDIVIDUAL WINDOW
+    ===================================================== */
 
     function refreshFrame(id) {
 
       const frame = document.getElementById(id);
 
-      frame.src = frame.src;
+      if (frame) {
+
+        const currentURL = frame.src;
+
+        frame.src = "";
+
+        setTimeout(function () {
+
+          frame.src = currentURL;
+
+        }, 100);
+
+      }
 
     }
 
 
-    /* ==============================
-       REFRESH ALL
-    ============================== */
+
+    /* =====================================================
+       REFRESH ALL 3 WINDOWS
+    ===================================================== */
 
     function refreshAll() {
 
-      document.getElementById("cryofleet").src = cryofleetURL;
+      document.getElementById("cryofleet").src =
+        cryofleetURL;
 
-      document.getElementById("petrocal").src = petrocalURL;
+
+      document.getElementById("petrocal1").src =
+        petrocal1URL;
+
+
+      document.getElementById("petrocal2").src =
+        petrocal2URL;
 
     }
 
 
-    /* ==============================
-       OPEN EXTERNALLY
-    ============================== */
+
+    /* =====================================================
+       OPEN WINDOW 1
+    ===================================================== */
 
     function openCryofleet() {
 
@@ -513,19 +605,42 @@
     }
 
 
-    function openPetrocal() {
+
+    /* =====================================================
+       OPEN WINDOW 2
+    ===================================================== */
+
+    function openPetrocal1() {
 
       window.open(
-        petrocalURL,
+        petrocal1URL,
         "_blank"
       );
 
     }
 
 
-    /* ==============================
-       AUTO REFRESH EVERY 60 SEC
-    ============================== */
+
+    /* =====================================================
+       OPEN WINDOW 3
+    ===================================================== */
+
+    function openPetrocal2() {
+
+      window.open(
+        petrocal2URL,
+        "_blank"
+      );
+
+    }
+
+
+
+    /* =====================================================
+       AUTO REFRESH
+
+       60000 ms = 60 seconds
+    ===================================================== */
 
     setInterval(
       refreshAll,
@@ -533,6 +648,7 @@
     );
 
   </script>
+
 
 </body>
 </html>
