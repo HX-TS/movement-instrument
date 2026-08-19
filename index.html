@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Lalamove Tracking Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #111;
+      color: white;
+    }
+
+    /* ==============================
+       HEADER
+    ============================== */
+
+    .header {
+      height: 58px;
+      background: #171717;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      border-bottom: 1px solid #333;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    .refresh-all {
+      border: 1px solid #555;
+      background: #242424;
+      color: white;
+      padding: 7px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .refresh-all:hover {
+      background: #333;
+    }
+
+    /* ==============================
+       MAIN 3-WINDOW GRID
+    ============================== */
+
+    .dashboard {
+      height: calc(100vh - 58px);
+      display: grid;
+
+      /* 3 equal windows */
+      grid-template-columns: repeat(3, 1fr);
+
+      gap: 5px;
+      padding: 5px;
+      background: #080808;
+    }
+
+    .window {
+      min-width: 0;
+      height: 100%;
+      background: #181818;
+      border: 1px solid #333;
+      border-radius: 7px;
+      overflow: hidden;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ==============================
+       WINDOW HEADER
+    ============================== */
+
+    .window-header {
+      height: 55px;
+      min-height: 55px;
+      background: #202020;
+      border-bottom: 1px solid #333;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 12px;
+    }
+
+    .window-info {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      min-width: 10px;
+      border-radius: 50%;
+      background: #39d353;
+      box-shadow: 0 0 7px #39d353;
+    }
+
+    .status-dot.waiting {
+      background: #ffb020;
+      box-shadow: 0 0 7px #ffb020;
+    }
+
+    .window-title {
+      font-size: 14px;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .window-subtitle {
+      margin-top: 3px;
+      color: #888;
+      font-size: 10px;
+    }
+
+    .window-buttons {
+      display: flex;
+      gap: 5px;
+    }
+
+    .window-button {
+      padding: 6px 8px;
+      border: 1px solid #444;
+      background: #292929;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .window-button:hover {
+      background: #3b3b3b;
+    }
+
+    /* ==============================
+       IFRAME
+    ============================== */
+
+    .frame-container {
+      position: relative;
+      flex: 1;
+      background: white;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: white;
+    }
+
+    /* ==============================
+       ONGOING WINDOW
+    ============================== */
+
+    .ongoing-panel {
+      width: 100%;
+      height: 100%;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      background:
+        radial-gradient(circle at center, #242424 0%, #151515 60%, #101010 100%);
+
+      color: white;
+      text-align: center;
+    }
+
+    .ongoing-icon {
+      font-size: 55px;
+      margin-bottom: 15px;
+    }
+
+    .ongoing-title {
+      font-size: 25px;
+      font-weight: 700;
+    }
+
+    .ongoing-text {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #999;
+    }
+
+    .ongoing-badge {
+      margin-top: 18px;
+      padding: 8px 18px;
+      border-radius: 20px;
+      background: #372b10;
+      border: 1px solid #795b15;
+      color: #ffbf35;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    /* ==============================
+       RESPONSIVE
+    ============================== */
+
+    @media (max-width: 1000px) {
+      body {
+        overflow: auto;
+      }
+
+      .dashboard {
+        height: auto;
+        min-height: calc(100vh - 58px);
+        grid-template-columns: 1fr;
+      }
+
+      .window {
+        height: 650px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==============================
+       TOP HEADER
+  =============================== -->
+
+  <div class="header">
+
+    <div class="header-title">
+      LALAMOVE TRACKING
+    </div>
+
+    <div class="header-right">
+
+      <span>
+        Auto Refresh:
+        <strong>60 sec</strong>
+      </span>
+
+      <button
+        class="refresh-all"
+        onclick="refreshAll()">
+        ↻ Refresh All
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==============================
+       DASHBOARD
+  =============================== -->
+
+  <div class="dashboard">
+
+
+    <!-- ===================================
+         WINDOW 1 - CRYOFLEET
+    ==================================== -->
+
+    <div class="window">
+
+      <div class="window-header">
+
+        <div class="window-info">
+
+          <div class="status-dot"></div>
+
+          <div>
+            <div class="window-title">
+              CRYOFLEET
+            </div>
+
+            <div class="window-subtitle">
+              Lalamove Live Tracking
+            </div>
+          </div>
+
+        </div>
+
+        <div class="window-buttons">
+
+          <button
+            class="window-button"
+            onclick="refreshFrame('cryofleet')">
+            ↻
+          </button>
+
+          <button
+            class="window-button"
+            onclick="openCryofleet()">
+            ↗
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="frame-container">
+
+        <iframe
+          id="cryofleet"
+          src="https://share.lalamove.com/?MY100260819112756959410010096388787&lang=en_MY&sign=fa4cff030cd65decc4e2f08cb92e010e&source=android"
+          allow="geolocation">
+        </iframe>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ===================================
+         WINDOW 2 - PETROCAL
+    ==================================== -->
+
+    <div class="window">
+
+      <div class="window-header">
+
+        <div class="window-info">
+
+          <div class="status-dot"></div>
+
+          <div>
+
+            <div class="window-title">
+              PETROCAL
+            </div>
+
+            <div class="window-subtitle">
+              Lalamove Live Tracking
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="window-buttons">
+
+          <button
+            class="window-button"
+            onclick="refreshFrame('petrocal')">
+            ↻
+          </button>
+
+          <button
+            class="window-button"
+            onclick="openPetrocal()">
+            ↗
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="frame-container">
+
+        <iframe
+          id="petrocal"
+          src="https://share.lalamove.com/?MY100260819115508237410010096251754&lang=en_MY&sign=26d4c8b15f6cc788f148a4c31b55111d&source=android"
+          allow="geolocation">
+        </iframe>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ===================================
+         WINDOW 3 - PETROCAL ONGOING
+    ==================================== -->
+
+    <div class="window">
+
+      <div class="window-header">
+
+        <div class="window-info">
+
+          <div class="status-dot waiting"></div>
+
+          <div>
+
+            <div class="window-title">
+              PETROCAL
+            </div>
+
+            <div class="window-subtitle">
+              Next Delivery
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="frame-container">
+
+        <div class="ongoing-panel">
+
+          <div class="ongoing-icon">
+            🚚
+          </div>
+
+          <div class="ongoing-title">
+            PETROCAL
+          </div>
+
+          <div class="ongoing-text">
+            Delivery tracking link pending
+          </div>
+
+          <div class="ongoing-badge">
+            ONGOING
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- ==============================
+       SCRIPT
+  =============================== -->
+
+  <script>
+
+    const cryofleetURL =
+      "https://share.lalamove.com/?MY100260819112756959410010096388787&lang=en_MY&sign=fa4cff030cd65decc4e2f08cb92e010e&source=android";
+
+    const petrocalURL =
+      "https://share.lalamove.com/?MY100260819115508237410010096251754&lang=en_MY&sign=26d4c8b15f6cc788f148a4c31b55111d&source=android";
+
+
+    /* ==============================
+       REFRESH ONE WINDOW
+    ============================== */
+
+    function refreshFrame(id) {
+
+      const frame = document.getElementById(id);
+
+      frame.src = frame.src;
+
+    }
+
+
+    /* ==============================
+       REFRESH ALL
+    ============================== */
+
+    function refreshAll() {
+
+      document.getElementById("cryofleet").src = cryofleetURL;
+
+      document.getElementById("petrocal").src = petrocalURL;
+
+    }
+
+
+    /* ==============================
+       OPEN EXTERNALLY
+    ============================== */
+
+    function openCryofleet() {
+
+      window.open(
+        cryofleetURL,
+        "_blank"
+      );
+
+    }
+
+
+    function openPetrocal() {
+
+      window.open(
+        petrocalURL,
+        "_blank"
+      );
+
+    }
+
+
+    /* ==============================
+       AUTO REFRESH EVERY 60 SEC
+    ============================== */
+
+    setInterval(
+      refreshAll,
+      60000
+    );
+
+  </script>
+
+</body>
+</html>
